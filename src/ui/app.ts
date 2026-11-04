@@ -1,9 +1,18 @@
 import { generateSecret } from '../game/generateSecret.js';
-import { createInitialState, startRound, submitGuess } from '../game/state.js';
+import {
+  createInitialState,
+  getAttempts,
+  getElapsedMs,
+  resetToSettings,
+  startRound,
+  submitGuess,
+} from '../game/state.js';
 import type { GameSettings, GameState } from '../game/types.js';
 import { clear, el } from './dom.js';
 import { createGuessInputPanel } from './guessInput.js';
+import { createHistoryPanel } from './history.js';
 import { createSettingsPanel } from './settings.js';
+import { createWinPanel } from './win.js';
 
 const DEFAULT_SETTINGS: GameSettings = {
   length: 4,
@@ -13,6 +22,7 @@ const DEFAULT_SETTINGS: GameSettings = {
 export const createApp = (root: HTMLElement): void => {
   let state: GameState = createInitialState();
   let draftSettings: GameSettings = { ...DEFAULT_SETTINGS };
+  let notice = '';
 
   const render = (): void => {
     clear(root);
@@ -38,6 +48,7 @@ export const createApp = (root: HTMLElement): void => {
             return;
           }
           draftSettings = next;
+          notice = '';
           render();
         },
         onStart: () => {
@@ -46,6 +57,7 @@ export const createApp = (root: HTMLElement): void => {
           }
           const secret = generateSecret(draftSettings.length, draftSettings.base);
           state = startRound(draftSettings, secret);
+          notice = '';
           render();
         },
       }),
@@ -53,13 +65,44 @@ export const createApp = (root: HTMLElement): void => {
 
     if (state.status === 'playing' || state.status === 'won') {
       const playSettings = state.settings ?? draftSettings;
+
       root.append(
         createGuessInputPanel({
           length: playSettings.length,
           base: playSettings.base,
           disabled: state.status !== 'playing',
+          notice,
           onSubmit: (guess) => {
-            state = submitGuess(state, guess);
+            const previousLength = state.history.length;
+            const nextState = submitGuess(state, guess);
+
+            if (nextState.history.length === previousLength) {
+              notice = 'This guess was already used.';
+              state = nextState;
+              render();
+              return;
+            }
+
+            notice = '';
+            state = nextState;
+            render();
+          },
+        }),
+        createHistoryPanel(state.history),
+      );
+    }
+
+    if (state.status === 'won') {
+      const elapsedMs = getElapsedMs(state) ?? 0;
+
+      root.append(
+        createWinPanel({
+          attempts: getAttempts(state),
+          elapsedMs,
+          onNewGame: () => {
+            draftSettings = state.settings ?? draftSettings;
+            state = resetToSettings();
+            notice = '';
             render();
           },
         }),

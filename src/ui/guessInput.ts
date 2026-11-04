@@ -7,11 +7,16 @@ export const createGuessInputPanel = (options: {
   length: number;
   base: Base;
   disabled: boolean;
+  notice?: string;
   onSubmit: (guess: string) => void;
 }): HTMLElement => {
-  const { length, base, disabled, onSubmit } = options;
+  const { length, base, disabled, notice = '', onSubmit } = options;
   const isDigit = createDigitValidator(base);
-  const message = el('p', { className: 'guess-message', attrs: { 'aria-live': 'polite' } });
+  const message = el('p', {
+    className: 'guess-message',
+    attrs: { 'aria-live': 'polite' },
+    text: notice,
+  });
 
   const input = el('input', {
     className: 'guess-input',
