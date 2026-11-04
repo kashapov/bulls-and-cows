@@ -4,7 +4,15 @@ export type GuessResult = {
 };
 
 export const evaluateGuess = (secret: string, guess: string): GuessResult => {
-  void secret;
-  void guess;
-  return { bulls: 0, cows: 0 };
+  const secretDigits = [...secret.toLowerCase()];
+  const guessDigits = [...guess.toLowerCase()];
+
+  const bulls = secretDigits.filter((digit, index) => digit === guessDigits[index]).length;
+
+  const nonBullSecret = secretDigits.filter((digit, index) => digit !== guessDigits[index]);
+  const nonBullGuess = guessDigits.filter((digit, index) => digit !== secretDigits[index]);
+
+  const cows = nonBullGuess.filter((digit) => nonBullSecret.includes(digit)).length;
+
+  return { bulls, cows };
 };
