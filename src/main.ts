@@ -1,4 +1,7 @@
-const app = document.createElement('div');
-app.id = 'app';
-app.textContent = 'Bulls and Cows';
-document.body.append(app);
+import { createApp } from './ui/app.js';
+
+const root = document.createElement('div');
+root.id = 'app';
+document.body.append(root);
+
+createApp(root);
