@@ -1,0 +1,6 @@
+[build]
+  command = "npm run build && rm -rf _site && mkdir _site && cp index.html .nojekyll _site/ && cp -r styles dist _site/"
+  publish = "_site"
+
+[build.environment]
+  NODE_VERSION = "22"
