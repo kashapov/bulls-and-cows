@@ -1,3 +1,4 @@
+import { addLeaderboardEntry, loadLeaderboard, saveLeaderboard } from '../game/leaderboard.js';
 import { generateSecret } from '../game/generateSecret.js';
 import {
   createInitialState,
@@ -7,10 +8,11 @@ import {
   startRound,
   submitGuess,
 } from '../game/state.js';
-import type { GameSettings, GameState } from '../game/types.js';
+import type { GameSettings, GameState, LeaderboardEntry } from '../game/types.js';
 import { clear, el } from './dom.js';
 import { createGuessInputPanel } from './guessInput.js';
 import { createHistoryPanel } from './history.js';
+import { createLeaderboardPanel } from './leaderboard.js';
 import { createSettingsPanel } from './settings.js';
 import { createWinPanel } from './win.js';
 
@@ -23,6 +25,8 @@ export const createApp = (root: HTMLElement): void => {
   let state: GameState = createInitialState();
   let draftSettings: GameSettings = { ...DEFAULT_SETTINGS };
   let notice = '';
+  let leaderboard: LeaderboardEntry[] = loadLeaderboard();
+  let savedCurrentWin = false;
 
   const render = (): void => {
     clear(root);
@@ -58,6 +62,7 @@ export const createApp = (root: HTMLElement): void => {
           const secret = generateSecret(draftSettings.length, draftSettings.base);
           state = startRound(draftSettings, secret);
           notice = '';
+          savedCurrentWin = false;
           render();
         },
       }),
@@ -85,6 +90,20 @@ export const createApp = (root: HTMLElement): void => {
 
             notice = '';
             state = nextState;
+
+            if (state.status === 'won' && !savedCurrentWin && state.settings !== null) {
+              const entry: LeaderboardEntry = {
+                attempts: getAttempts(state),
+                elapsedMs: getElapsedMs(state) ?? 0,
+                length: state.settings.length,
+                base: state.settings.base,
+                recordedAt: Date.now(),
+              };
+              leaderboard = addLeaderboardEntry(leaderboard, entry);
+              saveLeaderboard(leaderboard);
+              savedCurrentWin = true;
+            }
+
             render();
           },
         }),
@@ -103,11 +122,14 @@ export const createApp = (root: HTMLElement): void => {
             draftSettings = state.settings ?? draftSettings;
             state = resetToSettings();
             notice = '';
+            savedCurrentWin = false;
             render();
           },
         }),
       );
     }
+
+    root.append(createLeaderboardPanel(leaderboard));
   };
 
   render();

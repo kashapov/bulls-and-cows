@@ -21,3 +21,11 @@ export type GameState = {
   startedAt: number | null;
   finishedAt: number | null;
 };
+
+export type LeaderboardEntry = {
+  attempts: number;
+  elapsedMs: number;
+  length: number;
+  base: Base;
+  recordedAt: number;
+};
