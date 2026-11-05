@@ -80,8 +80,11 @@ out
 
 # Nuxt.js build / generate output
 .nuxt
-dist
+# dist is committed for static hosting (tsc → ES modules)
 .output
+
+# Netlify publish directory
+_site
 
 # Gatsby files
 .cache/

@@ -1,0 +1,253 @@
+:root {
+  color-scheme: light;
+  --ink: #1c241f;
+  --muted: #4d5c54;
+  --paper: #edf3ef;
+  --panel: rgba(255, 252, 247, 0.86);
+  --accent: #b84a1b;
+  --accent-ink: #fff8f2;
+  --line: #2f463a;
+  --field: #f8fbf8;
+  --ok: #2f6b4f;
+  --shadow: 0 18px 40px rgba(28, 36, 31, 0.12);
+  font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  line-height: 1.45;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(184, 74, 27, 0.16), transparent 34%),
+    linear-gradient(160deg, #d7e4db 0%, var(--paper) 46%, #f4efe6 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+#app {
+  width: min(720px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 2.5rem 0 4rem;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.hero {
+  padding: 0.5rem 0 0.25rem;
+}
+
+.brand {
+  margin: 0;
+  font-size: clamp(2.4rem, 8vw, 4rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+.tagline {
+  margin: 0.75rem 0 0;
+  max-width: 28rem;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid rgba(47, 70, 58, 0.18);
+  border-radius: 1.25rem;
+  padding: 1.25rem 1.35rem 1.4rem;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(8px);
+}
+
+.panel h2 {
+  margin: 0 0 1rem;
+  font-size: 1.2rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.option-group {
+  margin: 0 0 1rem;
+  padding: 0.85rem 1rem 1rem;
+  border: 1px solid rgba(47, 70, 58, 0.2);
+  border-radius: 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 0.85rem;
+}
+
+.option-group legend {
+  padding: 0 0.35rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+}
+
+.option input:disabled + span,
+.option-group:disabled .option {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.possible-count {
+  margin: 0 0 1rem;
+  color: var(--ok);
+  font-weight: 600;
+}
+
+.button {
+  appearance: none;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.7rem 1.25rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+.button.primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.guess-form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.guess-label {
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.guess-input {
+  width: 100%;
+  border: 1px solid rgba(47, 70, 58, 0.28);
+  border-radius: 0.85rem;
+  padding: 0.9rem 1rem;
+  font: inherit;
+  font-size: 1.35rem;
+  letter-spacing: 0.18em;
+  background: var(--field);
+  color: var(--ink);
+}
+
+.guess-input:disabled {
+  opacity: 0.6;
+}
+
+.guess-message {
+  min-height: 1.25rem;
+  margin: 0;
+  color: var(--accent);
+}
+
+.history-empty {
+  margin: 0;
+  color: var(--muted);
+}
+
+.history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.history-item {
+  display: grid;
+  grid-template-columns: 2rem 1fr auto;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.7rem 0.85rem;
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(47, 70, 58, 0.12);
+}
+
+.history-index {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.history-guess {
+  font-size: 1.2rem;
+  letter-spacing: 0.16em;
+}
+
+.history-result {
+  color: var(--ok);
+  font-size: 0.95rem;
+}
+
+.win-panel {
+  border-color: rgba(47, 107, 79, 0.35);
+}
+
+.win-summary {
+  margin: 0 0 1rem;
+  font-size: 1.15rem;
+}
+
+.leaderboard-empty {
+  margin: 0;
+  color: var(--muted);
+}
+
+.leaderboard-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.leaderboard-item {
+  display: grid;
+  grid-template-columns: 2rem 1fr auto;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.7rem 0.85rem;
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(47, 70, 58, 0.12);
+}
+
+.leaderboard-rank {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.leaderboard-score {
+  font-size: 1rem;
+}
+
+.leaderboard-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(47, 70, 58, 0.22);
+  background: rgba(47, 70, 58, 0.08);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  color: var(--line);
+}
